@@ -15,47 +15,71 @@ public class VendorDocument {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
     @NotBlank(message = "File URL is required")
     @Column(nullable = false)
     private String fileUrl;
 
+    private LocalDateTime uploadedAt;
+
     private LocalDate expiryDate;
 
     private Boolean isValid;
 
-    private LocalDateTime uploadedAt;
+    public VendorDocument() {}
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
         this.uploadedAt = LocalDateTime.now();
     }
 
-    public VendorDocument() {}
+    // Getters & Setters
+    public Long getId() {
+        return id;
+    }
 
-    // getters and setters
-    public Long getId() { return id; }
+    public Vendor getVendor() {
+        return vendor;
+    }
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
 
-    public Vendor getVendor() { return vendor; }
-    public void setVendor(Vendor vendor) { this.vendor = vendor; }
-
-    public DocumentType getDocumentType() { return documentType; }
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
     }
 
-    public String getFileUrl() { return fileUrl; }
-    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
+    public String getFileUrl() {
+        return fileUrl;
+    }
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
 
-    public LocalDate getExpiryDate() { return expiryDate; }
-    public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
+    public LocalDateTime getUploadedAt() {
+        return uploadedAt;
+    }
 
-    public Boolean getIsValid() { return isValid; }
-    public void setIsValid(Boolean isValid) { this.isValid = isValid; }
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
-    public LocalDateTime getUploadedAt() { return uploadedAt; }
+    public Boolean getIsValid() {
+        return isValid;
+    }
+    public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
 }
