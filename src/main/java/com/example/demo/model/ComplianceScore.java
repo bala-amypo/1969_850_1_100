@@ -44,4 +44,3 @@ public class ComplianceScore {
         this.lastEvaluated = lastEvaluated;
     }
 }
-Compliance score
