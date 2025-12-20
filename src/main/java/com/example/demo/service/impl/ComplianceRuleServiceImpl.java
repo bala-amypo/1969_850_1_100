@@ -39,5 +39,5 @@ public class ComplianceRuleServiceImpl implements ComplianceRuleService {
 
     @Override
     public ComplianceRule getRule(Long id) {
-        return compliance
+        return complianceRuleRepository
         }
