@@ -68,6 +68,9 @@ public class VendorDocument {
     public LocalDateTime getUploadedAt() {
         return uploadedAt;
     }
+    public void setUploadedAt(LocalDateTime uploadedAt){
+    this.uploadedAt=uploadedAt=uploadedAt;
+    }
 
     public LocalDate getExpiryDate() {
         return expiryDate;
