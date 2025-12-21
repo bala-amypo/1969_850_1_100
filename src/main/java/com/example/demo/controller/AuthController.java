@@ -25,4 +25,4 @@ public class AuthController {
     public String login() {
         return "Login successful (JWT will be added later)";
     }
-}
+} 
