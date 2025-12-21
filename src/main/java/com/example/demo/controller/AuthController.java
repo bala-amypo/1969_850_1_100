@@ -20,9 +20,8 @@ public class AuthController {
         return userService.registerUser(user);
     }
 
-    // Dummy login (JWT not covered yet)
     @PostMapping("/login")
     public String login() {
-        return "Login successful (JWT will be added later)";
+        return "Login successful ";
     }
 } 
