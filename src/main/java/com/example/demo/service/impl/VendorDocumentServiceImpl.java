@@ -22,7 +22,7 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
     private final DocumentTypeRepository documentTypeRepository;
     private final VendorDocumentRepository vendorDocumentRepository;
 
-    // ✅ Constructor-based dependency injection
+    // Constructor-based dependency injection
     public VendorDocumentServiceImpl(
             VendorRepository vendorRepository,
             DocumentTypeRepository documentTypeRepository,

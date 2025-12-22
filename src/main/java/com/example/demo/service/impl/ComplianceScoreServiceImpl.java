@@ -32,7 +32,7 @@ public class ComplianceScoreServiceImpl implements ComplianceScoreService {
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
-        // Simple score logic (for first review)
+        // Simple score logic 
         double scoreValue = 100;
 
         if (scoreValue < 0) {

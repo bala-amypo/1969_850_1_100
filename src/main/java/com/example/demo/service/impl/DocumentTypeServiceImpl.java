@@ -14,7 +14,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 
     private final DocumentTypeRepository documentTypeRepository;
 
-    // ✅ Constructor-based dependency injection
+    // Constructor-based dependency injection
     public DocumentTypeServiceImpl(DocumentTypeRepository documentTypeRepository) {
         this.documentTypeRepository = documentTypeRepository;
     }
@@ -22,7 +22,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
     @Override
     public DocumentType createDocumentType(DocumentType type) {
 
-        // Business validation: unique document type name
+        // Business validation
         if (documentTypeRepository.existsByTypeName(type.getTypeName())) {
             throw new ValidationException("Document type already exists");
         }
