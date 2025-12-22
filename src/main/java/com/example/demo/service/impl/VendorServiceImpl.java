@@ -14,7 +14,7 @@ public class VendorServiceImpl implements VendorService {
 
     private final VendorRepository vendorRepository;
 
-    // ✅ Constructor-based dependency injection
+    // Constructor-based dependency injection
     public VendorServiceImpl(VendorRepository vendorRepository) {
         this.vendorRepository = vendorRepository;
     }
@@ -22,7 +22,7 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor createVendor(Vendor vendor) {
 
-        // Business validation: unique vendor name
+        
         if (vendorRepository.existsByVendorName(vendor.getVendorName())) {
             throw new ValidationException("Vendor name already exists");
         }
