@@ -9,11 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "compliance_rules")
 public class ComplianceRule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank(message = "Rule name is required")
     @Column(nullable = false, unique = true)
     private String ruleName;
