@@ -18,7 +18,7 @@ public class ComplianceScoreServiceImpl implements ComplianceScoreService {
     private final VendorRepository vendorRepository;
     private final ComplianceScoreRepository complianceScoreRepository;
 
-    // ✅ Constructor-based DI
+    //  Constructor-based DI
     public ComplianceScoreServiceImpl(VendorRepository vendorRepository,
                                       ComplianceScoreRepository complianceScoreRepository) {
         this.vendorRepository = vendorRepository;
@@ -28,18 +28,18 @@ public class ComplianceScoreServiceImpl implements ComplianceScoreService {
     @Override
     public ComplianceScore evaluateVendor(Long vendorId) {
 
-        // 1️⃣ Check vendor exists
+        //Check vendor exists
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
-        // 2️⃣ Simple score logic (for first review)
+        // Simple score logic (for first review)
         double scoreValue = 100;
 
         if (scoreValue < 0) {
             throw new ValidationException("Compliance score cannot be negative");
         }
 
-        // 3️⃣ Create or update score
+        //Create or update score
         ComplianceScore score = complianceScoreRepository
                 .findByVendor_Id(vendorId)
                 .orElse(new ComplianceScore());

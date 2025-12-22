@@ -20,14 +20,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(User user) {
 
-        // Business validation: duplicate email
+        // Business validation
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ValidationException("Email already in use");
         }
-
-        // Password hashing will be added later (security not covered yet)
-
-        // Default role
         if (user.getRole() == null) {
             user.setRole("USER");
         }

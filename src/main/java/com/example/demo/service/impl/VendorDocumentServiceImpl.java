@@ -36,20 +36,16 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
     @Override
     public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document) {
 
-        // Load Vendor
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
-        // Load DocumentType
         DocumentType type = documentTypeRepository.findById(typeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Document type not found"));
 
-        // Business validation: fileUrl required
         if (document.getFileUrl() == null || document.getFileUrl().isBlank()) {
             throw new ValidationException("File URL is required");
         }
 
-        // Business validation: expiry must be future
         if (document.getExpiryDate() != null &&
                 document.getExpiryDate().isBefore(LocalDate.now())) {
             throw new ValidationException("Expiry date cannot be in the past");

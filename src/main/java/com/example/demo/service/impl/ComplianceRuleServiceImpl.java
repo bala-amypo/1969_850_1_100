@@ -13,8 +13,6 @@ import java.util.List;
 public class ComplianceRuleServiceImpl implements ComplianceRuleService {
 
     private final ComplianceRuleRepository complianceRuleRepository;
-
-    // Constructor-based dependency injection
     public ComplianceRuleServiceImpl(ComplianceRuleRepository complianceRuleRepository) {
         this.complianceRuleRepository = complianceRuleRepository;
     }
@@ -22,7 +20,7 @@ public class ComplianceRuleServiceImpl implements ComplianceRuleService {
     @Override
     public ComplianceRule createRule(ComplianceRule rule) {
 
-        // Business validation: unique rule name (if provided)
+        // Business validation: unique rule name 
         if (rule.getRuleName() != null &&
                 complianceRuleRepository.findAll().stream()
                         .anyMatch(r -> r.getRuleName().equalsIgnoreCase(rule.getRuleName()))) {
