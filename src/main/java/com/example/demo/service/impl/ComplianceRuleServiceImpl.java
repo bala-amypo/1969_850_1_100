@@ -14,7 +14,7 @@ public class ComplianceRuleServiceImpl implements ComplianceRuleService {
 
     private final ComplianceRuleRepository complianceRuleRepository;
 
-    // ✅ Constructor-based dependency injection
+    // Constructor-based dependency injection
     public ComplianceRuleServiceImpl(ComplianceRuleRepository complianceRuleRepository) {
         this.complianceRuleRepository = complianceRuleRepository;
     }
