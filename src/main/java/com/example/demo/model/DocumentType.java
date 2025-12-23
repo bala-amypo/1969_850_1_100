@@ -29,13 +29,11 @@ public class DocumentType {
     private LocalDateTime createdAt;
 
     public DocumentType() {}
-
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }

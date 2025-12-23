@@ -35,8 +35,6 @@ public class VendorDocument {
     public void onCreate() {
         this.uploadedAt = LocalDateTime.now();
     }
-
-    // Getters & Setters
     public Long getId() {
         return id;
     }

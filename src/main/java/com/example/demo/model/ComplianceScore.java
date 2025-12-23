@@ -25,8 +25,6 @@ public class ComplianceScore {
     private LocalDateTime lastEvaluated;
 
     public ComplianceScore() {}
-
-    // getters and setters
     public Long getId() { return id; }
 
     public Vendor getVendor() { return vendor; }
