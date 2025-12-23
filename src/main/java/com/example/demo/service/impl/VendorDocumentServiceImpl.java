@@ -21,24 +21,20 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
     private final VendorRepository vendorRepository;
     private final DocumentTypeRepository documentTypeRepository;
     private final VendorDocumentRepository vendorDocumentRepository;
-
-    // Constructor-based dependency injection
     public VendorDocumentServiceImpl(
             VendorRepository vendorRepository,
             DocumentTypeRepository documentTypeRepository,
-            VendorDocumentRepository vendorDocumentRepository) {
-
+            VendorDocumentRepository vendorDocumentRepository) 
+            {
         this.vendorRepository = vendorRepository;
         this.documentTypeRepository = documentTypeRepository;
         this.vendorDocumentRepository = vendorDocumentRepository;
     }
-
     @Override
-    public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document) {
-
+    public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document)
+     {
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
-
         DocumentType type = documentTypeRepository.findById(typeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Document type not found"));
 
@@ -50,8 +46,6 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
                 document.getExpiryDate().isBefore(LocalDate.now())) {
             throw new ValidationException("Expiry date cannot be in the past");
         }
-
-        // Set relations and metadata
         document.setVendor(vendor);
         document.setDocumentType(type);
         document.setUploadedAt(LocalDateTime.now());
