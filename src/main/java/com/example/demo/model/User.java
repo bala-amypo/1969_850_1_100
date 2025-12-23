@@ -29,7 +29,9 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    public User() {}
+    public User() {
+        
+    }
 
     @PrePersist
     public void onCreate() {
