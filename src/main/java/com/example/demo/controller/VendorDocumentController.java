@@ -15,7 +15,6 @@ public class VendorDocumentController {
     public VendorDocumentController(VendorDocumentService vendorDocumentService) {
         this.vendorDocumentService = vendorDocumentService;
     }
-
     @PostMapping
     public VendorDocument uploadDocument(
             @RequestParam Long vendorId,
