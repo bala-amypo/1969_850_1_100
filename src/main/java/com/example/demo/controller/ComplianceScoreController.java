@@ -11,8 +11,8 @@ import java.util.List;
 public class ComplianceScoreController {
 
     private final ComplianceScoreService complianceScoreService;
-
-    public ComplianceScoreController(ComplianceScoreService complianceScoreService) {
+    public ComplianceScoreController(ComplianceScoreService complianceScoreService) 
+    {
         this.complianceScoreService = complianceScoreService;
     }
 
@@ -27,7 +27,8 @@ public class ComplianceScoreController {
     }
 
     @GetMapping
-    public List<ComplianceScore> getAllScores() {
+    public List<ComplianceScore> getAllScores() 
+    {
         return complianceScoreService.getAllScores();
     }
 }
