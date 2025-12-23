@@ -31,15 +31,28 @@ public class ComplianceScore {
     public Long getId() { return id; }
 
     public Vendor getVendor() { return vendor; }
-    public void setVendor(Vendor vendor) { this.vendor = vendor; }
+    public void setVendor(Vendor vendor)
+     {
+         this.vendor = vendor;
+          }
 
-    public Double getScoreValue() { return scoreValue; }
-    public void setScoreValue(Double scoreValue) { this.scoreValue = scoreValue; }
+    public Double getScoreValue() { 
+        return scoreValue;
+         }
+    public void setScoreValue(Double scoreValue) { 
+        this.scoreValue = scoreValue;
+         }
 
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
+    public String getRating() { 
+        return rating;
+         }
+    public void setRating(String rating) {
+         this.rating = rating;
+          }
 
-    public LocalDateTime getLastEvaluated() { return lastEvaluated; }
+    public LocalDateTime getLastEvaluated() { 
+        return lastEvaluated; 
+        }
     public void setLastEvaluated(LocalDateTime lastEvaluated) {
         this.lastEvaluated = lastEvaluated;
     }
