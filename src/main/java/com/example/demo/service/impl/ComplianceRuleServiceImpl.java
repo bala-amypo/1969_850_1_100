@@ -20,7 +20,6 @@ public class ComplianceRuleServiceImpl implements ComplianceRuleService {
     @Override
     public ComplianceRule createRule(ComplianceRule rule) {
 
-        // Business validation: unique rule name 
         if (rule.getRuleName() != null &&
                 complianceRuleRepository.findAll().stream()
                         .anyMatch(r -> r.getRuleName().equalsIgnoreCase(rule.getRuleName()))) {
