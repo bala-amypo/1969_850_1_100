@@ -14,7 +14,6 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 
     private final DocumentTypeRepository documentTypeRepository;
 
-    // Constructor-based dependency injection
     public DocumentTypeServiceImpl(DocumentTypeRepository documentTypeRepository) {
         this.documentTypeRepository = documentTypeRepository;
     }

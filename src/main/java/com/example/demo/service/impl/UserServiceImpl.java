@@ -12,31 +12,25 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    // Constructor-based dependency injection
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public User registerUser(User user) {
-
-        // Business validation
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ValidationException("Email already in use");
         }
         if (user.getRole() == null) {
             user.setRole("USER");
         }
-
         return userRepository.save(user);
     }
-
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
-
     @Override
     public User getById(Long id) {
         return userRepository.findById(id)
