@@ -9,26 +9,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vendors")
 public class Vendor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Vendor name is required")
     @Column(nullable = false, unique = true)
-    private String vendorName;
 
+    private String vendorName;
+    
     @Email(message = "Invalid email format")
     private String email;
-
     private String phone;
-
     private String industry;
-
     private LocalDateTime createdAt;
-
     public Vendor() {}
-
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();

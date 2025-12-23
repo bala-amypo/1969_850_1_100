@@ -16,7 +16,6 @@ public class ComplianceScore {
 
     @OneToOne(optional = false)
     private Vendor vendor;
-
     @Min(0)
     @Max(100)
     private Double scoreValue;

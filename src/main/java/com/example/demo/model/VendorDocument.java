@@ -1,10 +1,10 @@
 package com.example.demo.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "vendor_documents")
@@ -21,17 +21,14 @@ public class VendorDocument {
     @ManyToOne(optional = false)
     @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
-
     @NotBlank(message = "File URL is required")
     @Column(nullable = false)
+    
     private String fileUrl;
 
     private LocalDateTime uploadedAt;
-
     private LocalDate expiryDate;
-
     private Boolean isValid;
-
     public VendorDocument() {}
 
     @PrePersist
