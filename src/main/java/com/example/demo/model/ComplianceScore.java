@@ -20,7 +20,7 @@ public class ComplianceScore {
     @Max(100)
     private Double scoreValue;
 
-    private String rating; // EXCELLENT, GOOD, POOR, NONCOMPLIANT
+    private String rating;
 
     private LocalDateTime lastEvaluated;
 
@@ -35,24 +35,30 @@ public class ComplianceScore {
          this.vendor = vendor;
           }
 
-    public Double getScoreValue() { 
+    public Double getScoreValue()
+     { 
         return scoreValue;
          }
-    public void setScoreValue(Double scoreValue) { 
+    public void setScoreValue(Double scoreValue)
+     { 
         this.scoreValue = scoreValue;
          }
 
-    public String getRating() { 
+    public String getRating() 
+    { 
         return rating;
          }
-    public void setRating(String rating) {
+    public void setRating(String rating) 
+    {
          this.rating = rating;
           }
 
-    public LocalDateTime getLastEvaluated() { 
+    public LocalDateTime getLastEvaluated() 
+    { 
         return lastEvaluated; 
         }
-    public void setLastEvaluated(LocalDateTime lastEvaluated) {
+    public void setLastEvaluated(LocalDateTime lastEvaluated)
+     {
         this.lastEvaluated = lastEvaluated;
     }
 }

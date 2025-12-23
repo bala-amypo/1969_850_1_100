@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "vendors")
 public class Vendor {
@@ -17,15 +16,17 @@ public class Vendor {
     @Column(nullable = false, unique = true)
 
     private String vendorName;
-    
     @Email(message = "Invalid email format")
     private String email;
     private String phone;
     private String industry;
     private LocalDateTime createdAt;
-    public Vendor() {}
+    public Vendor() {
+        
+    }
     @PrePersist
-    public void onCreate() {
+    public void onCreate() 
+    {
         this.createdAt = LocalDateTime.now();
     }
 
