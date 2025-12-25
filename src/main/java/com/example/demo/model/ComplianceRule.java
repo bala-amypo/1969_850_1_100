@@ -19,7 +19,7 @@ public class ComplianceRule {
     private String ruleDescription;
 
     @Column(nullable = false)
-    private String matchType; // EXPIRY_CHECK / DOCUMENT_REQUIRED / WEIGHTED_SCORE
+    private String matchType; 
 
     @Min(value = 0, message = "Threshold cannot be negative")
     private Double threshold;
