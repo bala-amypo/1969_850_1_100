@@ -1,43 +1,62 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.ComplianceScore;
+import com.example.demo.model.DocumentType;
+import com.example.demo.model.Vendor;
+import com.example.demo.model.VendorDocument;
+import com.example.demo.repository.ComplianceScoreRepository;
+import com.example.demo.repository.DocumentTypeRepository;
+import com.example.demo.repository.VendorDocumentRepository;
+import com.example.demo.repository.VendorRepository;
+import com.example.demo.service.ComplianceScoreService;
 import com.example.demo.util.ComplianceScoringEngine;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class ComplianceScoreServiceImpl {
-    private final VendorRepository vendorRepo;
-    private final DocumentTypeRepository typeRepo;
-    private final VendorDocumentRepository docRepo;
-    private final ComplianceScoreRepository scoreRepo;
+public class ComplianceScoreServiceImpl implements ComplianceScoreService {
+
+    private final VendorRepository vendorRepository;
+    private final DocumentTypeRepository documentTypeRepository;
+    private final VendorDocumentRepository vendorDocumentRepository;
+    private final ComplianceScoreRepository complianceScoreRepository;
+
     private final ComplianceScoringEngine scoringEngine = new ComplianceScoringEngine();
 
-    public ComplianceScoreServiceImpl(VendorRepository vendorRepo, DocumentTypeRepository typeRepo, VendorDocumentRepository docRepo, ComplianceScoreRepository scoreRepo) {
-        this.vendorRepo = vendorRepo;
-        this.typeRepo = typeRepo;
-        this.docRepo = docRepo;
-        this.scoreRepo = scoreRepo;
+    public ComplianceScoreServiceImpl(VendorRepository vendorRepository,
+                                      DocumentTypeRepository documentTypeRepository,
+                                      VendorDocumentRepository vendorDocumentRepository,
+                                      ComplianceScoreRepository complianceScoreRepository) {
+        this.vendorRepository = vendorRepository;
+        this.documentTypeRepository = documentTypeRepository;
+        this.vendorDocumentRepository = vendorDocumentRepository;
+        this.complianceScoreRepository = complianceScoreRepository;
     }
 
+    @Override
     public ComplianceScore evaluateVendor(Long vendorId) {
-        Vendor vendor = vendorRepo.findById(vendorId).orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
-        List<DocumentType> required = typeRepo.findByRequiredTrue();
-        List<VendorDocument> submitted = docRepo.findByVendor(vendor);
+        List<DocumentType> required = documentTypeRepository.findByRequiredTrue();
+        List<VendorDocument> uploaded = vendorDocumentRepository.findByVendor(vendor);
 
-        double score = scoringEngine.calculateScore(required, submitted);
+        ComplianceScore existing = complianceScoreRepository.findByVendor_Id(vendorId).orElse(null);
+        if (existing == null) existing = new ComplianceScore();
 
-        ComplianceScore cs = scoreRepo.findByVendor_Id(vendorId).orElse(new ComplianceScore());
-        cs.setVendor(vendor);
-        cs.setScoreValue(score);
-        cs.setRating(scoringEngine.deriveRating(score));
-        return scoreRepo.save(cs);
+        double scoreValue = scoringEngine.calculateScore(required, uploaded);
+        existing.setVendor(vendor);
+        existing.setScoreValue(scoreValue);
+        existing.setRating(scoringEngine.deriveRating(scoreValue));
+
+        return complianceScoreRepository.save(existing);
     }
 
+    @Override
     public ComplianceScore getScore(Long vendorId) {
-        return scoreRepo.findByVendor_Id(vendorId).orElseThrow(() -> new ResourceNotFoundException("Score not found"));
+        return complianceScoreRepository.findByVendor_Id(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Score not found"));
     }
 }
