@@ -1,37 +1,51 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.DocumentType;
+import com.example.demo.model.Vendor;
+import com.example.demo.model.VendorDocument;
+import com.example.demo.repository.DocumentTypeRepository;
+import com.example.demo.repository.VendorDocumentRepository;
+import com.example.demo.repository.VendorRepository;
+import com.example.demo.service.VendorDocumentService;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 
 @Service
-public class VendorDocumentServiceImpl {
-    private final VendorDocumentRepository docRepo;
-    private final VendorRepository vendorRepo;
-    private final DocumentTypeRepository typeRepo;
+public class VendorDocumentServiceImpl implements VendorDocumentService {
 
-    public VendorDocumentServiceImpl(VendorDocumentRepository docRepo, VendorRepository vendorRepo, DocumentTypeRepository typeRepo) {
-        this.docRepo = docRepo;
-        this.vendorRepo = vendorRepo;
-        this.typeRepo = typeRepo;
+    private final VendorDocumentRepository vendorDocumentRepository;
+    private final VendorRepository vendorRepository;
+    private final DocumentTypeRepository documentTypeRepository;
+
+    public VendorDocumentServiceImpl(VendorDocumentRepository vendorDocumentRepository,
+                                     VendorRepository vendorRepository,
+                                     DocumentTypeRepository documentTypeRepository) {
+        this.vendorDocumentRepository = vendorDocumentRepository;
+        this.vendorRepository = vendorRepository;
+        this.documentTypeRepository = documentTypeRepository;
     }
 
-    public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument doc) {
-        Vendor vendor = vendorRepo.findById(vendorId).orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
-        DocumentType type = typeRepo.findById(typeId).orElseThrow(() -> new ResourceNotFoundException("DocumentType not found"));
+    @Override
+    public VendorDocument uploadDocument(Long vendorId, Long documentTypeId, VendorDocument doc) {
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+        DocumentType dt = documentTypeRepository.findById(documentTypeId)
+                .orElseThrow(() -> new ResourceNotFoundException("DocumentType not found"));
 
         if (doc.getExpiryDate() != null && doc.getExpiryDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Expiry date cannot be in the past");
         }
 
         doc.setVendor(vendor);
-        doc.setDocumentType(type);
-        return docRepo.save(doc);
+        doc.setDocumentType(dt);
+        return vendorDocumentRepository.save(doc);
     }
 
+    @Override
     public VendorDocument getDocument(Long id) {
-        return docRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("VendorDocument not found"));
+        return vendorDocumentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorDocument not found"));
     }
 }
