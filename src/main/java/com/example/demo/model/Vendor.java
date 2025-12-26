@@ -33,16 +33,30 @@ public class Vendor {
     }
 
     // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+    return id;
+     }
+    public void setId(Long id) { 
+    this.id = id; 
+    }
 
-    public String getVendorName() { return vendorName; }
-    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    public String getVendorName() {
+     return vendorName; 
+     }
+    public void setVendorName(String vendorName) {
+     this.vendorName = vendorName; 
+     }
 
-    public String getIndustry() { return industry; }
-    public void setIndustry(String industry) { this.industry = industry; }
+    public String getIndustry() {
+     return industry; 
+     }
+    public void setIndustry(String industry) { 
+    this.industry = industry;
+     }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getCreatedAt() { 
+    return createdAt;
+     }
 
     public Set<DocumentType> getSupportedDocumentTypes() {
         return supportedDocumentTypes;
