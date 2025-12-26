@@ -13,11 +13,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    // Constructor injection
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // ================= AUTH RELATED =================
     @Override
     public User registerUser(User user) {
         return userRepository.save(user);
@@ -28,25 +28,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-    // ================= GENERIC CRUD =================
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public Optional<User> getById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public User getById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Override
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public void delete(Long id) {
-        userRepository.deleteById(id);
     }
 }
