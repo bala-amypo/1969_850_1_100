@@ -1,8 +1,4 @@
-package com.example.demo.security;
 
-public class JwtUtil {
-
-}
 package com.example.demo.security;
 
 import java.util.Date;
