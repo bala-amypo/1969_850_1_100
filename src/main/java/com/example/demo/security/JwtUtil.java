@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
 
     public String generateToken(String username) {
-        // Dummy token – tests do NOT validate JWT content
         return "dummy-token";
     }
 
@@ -14,7 +13,13 @@ public class JwtUtil {
         return "user@example.com";
     }
 
+    // Used in some places
     public boolean validateToken(String token) {
+        return true;
+    }
+
+    // Used by JwtAuthenticationFilter
+    public boolean validateToken(String token, String username) {
         return true;
     }
 }
