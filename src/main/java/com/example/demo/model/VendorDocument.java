@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "vendor_documents")
@@ -13,35 +12,30 @@ public class VendorDocument {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
     @ManyToOne
+    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
-    @Column(nullable = false)
     private String fileUrl;
-
-    private LocalDateTime uploadedAt;
     private LocalDate expiryDate;
     private Boolean isValid;
 
     public VendorDocument() {}
 
-    public VendorDocument(String fileUrl, LocalDate expiryDate) {
-        this.fileUrl = fileUrl;
-        this.expiryDate = expiryDate;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.uploadedAt = LocalDateTime.now();
-
-        if (expiryDate == null || expiryDate.isAfter(LocalDate.now())) {
-            this.isValid = true;
-        } else {
-            this.isValid = false;
-        }
-    }
-
-    // getters and setters
+    // ===== Getters & Setters =====
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Vendor getVendor() { return vendor; }
+    public void setVendor(Vendor vendor) { this.vendor = vendor; }
+    public DocumentType getDocumentType() { return documentType; }
+    public void setDocumentType(DocumentType documentType) { this.documentType = documentType; }
+    public String getFileUrl() { return fileUrl; }
+    public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
+    public LocalDate getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
+    public Boolean getIsValid() { return isValid; }
+    public void setIsValid(Boolean isValid) { this.isValid = isValid; }
 }

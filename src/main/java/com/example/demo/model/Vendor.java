@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vendors", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "vendorName")
-})
+@Table(name = "vendors", uniqueConstraints = {@UniqueConstraint(columnNames = "vendorName")})
 public class Vendor {
 
     @Id
@@ -17,7 +15,6 @@ public class Vendor {
     private String email;
     private String phone;
     private String industry;
-
     private LocalDateTime createdAt;
 
     public Vendor() {}
@@ -34,5 +31,17 @@ public class Vendor {
         this.createdAt = LocalDateTime.now();
     }
 
-    // getters and setters
+    // ===== Getters & Setters =====
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getVendorName() { return vendorName; }
+    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public String getIndustry() { return industry; }
+    public void setIndustry(String industry) { this.industry = industry; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
