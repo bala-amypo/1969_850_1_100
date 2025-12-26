@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.model.ComplianceScore;
 import java.util.List;
+import com.example.demo.model.ComplianceScore;
 
 public interface ComplianceScoreService {
     ComplianceScore evaluateVendor(Long vendorId);
