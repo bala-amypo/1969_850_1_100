@@ -2,8 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "vendors", uniqueConstraints = {
@@ -22,14 +20,6 @@ public class Vendor {
 
     private LocalDateTime createdAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "vendor_document_types",
-            joinColumns = @JoinColumn(name = "vendor_id"),
-            inverseJoinColumns = @JoinColumn(name = "document_type_id")
-    )
-    private Set<DocumentType> supportedDocumentTypes = new HashSet<>();
-
     public Vendor() {}
 
     public Vendor(String vendorName, String email, String phone, String industry) {
@@ -44,5 +34,5 @@ public class Vendor {
         this.createdAt = LocalDateTime.now();
     }
 
-    // getters & setters
+    // getters and setters
 }

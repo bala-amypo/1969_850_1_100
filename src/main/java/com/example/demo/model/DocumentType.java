@@ -2,8 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "document_types", uniqueConstraints = {
@@ -22,9 +20,6 @@ public class DocumentType {
 
     private LocalDateTime createdAt;
 
-    @ManyToMany(mappedBy = "supportedDocumentTypes")
-    private Set<Vendor> vendors = new HashSet<>();
-
     public DocumentType() {}
 
     public DocumentType(String typeName, String description, Boolean required, Integer weight) {
@@ -42,5 +37,5 @@ public class DocumentType {
         }
     }
 
-    // getters & setters
+    // getters and setters
 }
