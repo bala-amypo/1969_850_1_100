@@ -1,14 +1,13 @@
 package com.example.demo.util;
 
 import java.util.List;
-
-import com.example.demo.model.*;
-import com.example.demo.repository.ComplianceRuleRepository;
+import com.example.demo.model.Vendor;
+import com.example.demo.model.VendorDocument;
 import com.example.demo.repository.VendorDocumentRepository;
+import com.example.demo.repository.ComplianceRuleRepository;
 
 public class ComplianceScoringEngine {
 
-    // Calculate weighted score (0-100)
     public static double calculateScore(Vendor vendor,
                                         VendorDocumentRepository vendorDocumentRepository,
                                         ComplianceRuleRepository complianceRuleRepository) {
@@ -21,16 +20,15 @@ public class ComplianceScoringEngine {
 
         for (VendorDocument doc : documents) {
             if (doc.getIsValid() != null && doc.getIsValid()) {
-                scoreSum += 1.0; // can be extended using DocumentType.weight if required
+                scoreSum += 1.0;
             }
             totalWeight += 1.0;
         }
 
         double result = (totalWeight == 0 ? 0 : (scoreSum / totalWeight) * 100);
-        return Math.max(0, Math.min(result, 100)); // clamp between 0–100
+        return Math.max(0, Math.min(result, 100));
     }
 
-    // Derive rating string based on score
     public static String deriveRating(double score) {
         if (score >= 90) return "EXCELLENT";
         if (score >= 70) return "GOOD";
