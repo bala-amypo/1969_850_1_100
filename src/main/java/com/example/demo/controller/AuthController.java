@@ -10,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -38,9 +40,12 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        User user = userService.findByEmail(request.getEmail())
-                               .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<User> userOpt = userService.findByEmail(request.getEmail());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        User user = userOpt.get();
         String token = jwtUtil.generateToken(user.getEmail());
 
         AuthResponse response = new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
