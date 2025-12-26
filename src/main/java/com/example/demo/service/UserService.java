@@ -1,18 +1,23 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
-    // Methods required by AuthController
+    // Register/save a new user
     User registerUser(User user);
-    Optional<User> findByEmail(String email);
 
-    // Generic CRUD methods
-    User save(User user);
+    // Find user by email
+    User findByEmail(String email);
+
+    // Find user by ID
     User getById(Long id);
-    List<User> getAll();
+
+    // Get all users
+    List<User> getAllUsers();
+
+    // Delete user by ID
     void delete(Long id);
 }
