@@ -9,7 +9,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    // Used in AuthController & UserServiceImpl
     Optional<User> findByEmail(String email);
 
+    // Used in tests to check duplicate users
     boolean existsByEmail(String email);
 }
