@@ -1,67 +1,68 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.ValidationException;
-import com.example.demo.model.DocumentType;
 import com.example.demo.model.Vendor;
 import com.example.demo.model.VendorDocument;
-import com.example.demo.repository.DocumentTypeRepository;
+import com.example.demo.model.DocumentType;
 import com.example.demo.repository.VendorDocumentRepository;
 import com.example.demo.repository.VendorRepository;
+import com.example.demo.repository.DocumentTypeRepository;
 import com.example.demo.service.VendorDocumentService;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class VendorDocumentServiceImpl implements VendorDocumentService {
 
+    private final VendorDocumentRepository vendorDocumentRepository;
     private final VendorRepository vendorRepository;
     private final DocumentTypeRepository documentTypeRepository;
-    private final VendorDocumentRepository vendorDocumentRepository;
-    public VendorDocumentServiceImpl(
-            VendorRepository vendorRepository,
-            DocumentTypeRepository documentTypeRepository,
-            VendorDocumentRepository vendorDocumentRepository) 
-            {
+
+    public VendorDocumentServiceImpl(VendorDocumentRepository vendorDocumentRepository,
+                                     VendorRepository vendorRepository,
+                                     DocumentTypeRepository documentTypeRepository) {
+        this.vendorDocumentRepository = vendorDocumentRepository;
         this.vendorRepository = vendorRepository;
         this.documentTypeRepository = documentTypeRepository;
-        this.vendorDocumentRepository = vendorDocumentRepository;
     }
+
     @Override
-    public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document)
-     {
+    public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document) {
         Vendor vendor = vendorRepository.findById(vendorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
         DocumentType type = documentTypeRepository.findById(typeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Document type not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Document Type not found"));
 
-        if (document.getFileUrl() == null || document.getFileUrl().isBlank()) {
+        if (document.getFileUrl() == null || document.getFileUrl().isEmpty()) {
             throw new ValidationException("File URL is required");
         }
 
-        if (document.getExpiryDate() != null &&
-                document.getExpiryDate().isBefore(LocalDate.now())) {
-            throw new ValidationException("Expiry date cannot be in the past");
+        if (document.getExpiryDate() != null && document.getExpiryDate().isBefore(LocalDate.now())) {
+            throw new ValidationException("Document has expired");
         }
+
         document.setVendor(vendor);
         document.setDocumentType(type);
-        document.setUploadedAt(LocalDateTime.now());
-        document.setIsValid(true);
+
+        // isValid handled in entity @PrePersist
 
         return vendorDocumentRepository.save(document);
     }
 
     @Override
     public List<VendorDocument> getDocumentsForVendor(Long vendorId) {
-        return vendorDocumentRepository.findByVendor_Id(vendorId);
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+        return vendorDocumentRepository.findByVendor(vendor);
     }
 
     @Override
     public VendorDocument getDocument(Long id) {
         return vendorDocumentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Vendor document not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("VendorDocument not found"));
     }
 }
