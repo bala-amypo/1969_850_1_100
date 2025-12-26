@@ -1,5 +1,3 @@
-
-
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.ResourceNotFoundException;
@@ -15,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ TEST EXPECTS THIS CONSTRUCTOR
+    // REQUIRED by test case
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -24,8 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user) {
+
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new IllegalArgumentException("Email already used");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -48,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found");
+        }
         userRepository.deleteById(id);
     }
 }
