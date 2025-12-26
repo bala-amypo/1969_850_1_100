@@ -12,6 +12,7 @@ public class VendorDocumentDTO {
 
     public VendorDocumentDTO() {}
 
+    // Full constructor (6 params)
     public VendorDocumentDTO(Long id, Long vendorId, Long documentTypeId, String fileUrl, LocalDate expiryDate, Boolean isValid) {
         this.id = id;
         this.vendorId = vendorId;
@@ -21,6 +22,12 @@ public class VendorDocumentDTO {
         this.isValid = isValid;
     }
 
+    // Optional constructor (5 params) for backward compatibility
+    public VendorDocumentDTO(Long id, Long vendorId, Long documentTypeId, String fileUrl, LocalDate expiryDate) {
+        this(id, vendorId, documentTypeId, fileUrl, expiryDate, null);
+    }
+
+    // ===== Getters & Setters =====
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
