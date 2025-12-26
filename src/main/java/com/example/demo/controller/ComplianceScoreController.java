@@ -1,34 +1,51 @@
 package com.example.demo.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.example.demo.dto.ComplianceScoreDTO;
 import com.example.demo.model.ComplianceScore;
 import com.example.demo.service.ComplianceScoreService;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/compliance-scores")
-public class ComplianceScoreController 
-{
-    private final ComplianceScoreService complianceScoreService;
-    public ComplianceScoreController(ComplianceScoreService complianceScoreService) 
-    {
-        this.complianceScoreService = complianceScoreService;
+public class ComplianceScoreController {
+
+    private final ComplianceScoreService scoreService;
+
+    @Autowired
+    public ComplianceScoreController(ComplianceScoreService scoreService) {
+        this.scoreService = scoreService;
     }
+
     @PostMapping("/evaluate")
-    public ComplianceScore evaluate(@RequestParam Long vendorId) {
-        return complianceScoreService.evaluateVendor(vendorId);
+    public ComplianceScoreDTO evaluate(@RequestParam Long vendorId) {
+        ComplianceScore cs = scoreService.evaluateVendor(vendorId);
+        return new ComplianceScoreDTO(cs.getId(),
+                cs.getVendor().getId(),
+                cs.getScoreValue(),
+                cs.getRating());
     }
 
     @GetMapping("/vendor/{vendorId}")
-    public ComplianceScore getScore(@PathVariable Long vendorId)
-     {
-        return complianceScoreService.getScore(vendorId);
+    public ComplianceScoreDTO getScore(@PathVariable Long vendorId) {
+        ComplianceScore cs = scoreService.getScore(vendorId);
+        return new ComplianceScoreDTO(cs.getId(),
+                cs.getVendor().getId(),
+                cs.getScoreValue(),
+                cs.getRating());
     }
 
     @GetMapping
-    public List<ComplianceScore> getAllScores() 
-    {
-        return complianceScoreService.getAllScores();
+    public List<ComplianceScoreDTO> getAll() {
+        return scoreService.getAllScores().stream()
+                .map(cs -> new ComplianceScoreDTO(cs.getId(),
+                        cs.getVendor().getId(),
+                        cs.getScoreValue(),
+                        cs.getRating()))
+                .collect(Collectors.toList());
     }
 }
