@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -36,19 +34,27 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
         );
 
-        Optional<User> userOpt = userService.findByEmail(request.getEmail());
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        // ✅ IMPORTANT: findByEmail returns User, NOT Optional
+        User user = userService.findByEmail(request.getEmail());
 
-        User user = userOpt.get();
         String token = jwtUtil.generateToken(user.getEmail());
 
-        AuthResponse response = new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
+        AuthResponse response =
+                new AuthResponse(
+                        token,
+                        user.getId(),
+                        user.getEmail(),
+                        user.getRole()
+                );
+
         return ResponseEntity.ok(response);
     }
 }
