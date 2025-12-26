@@ -1,60 +1,42 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.model.User;
-import com.example.demo.security.JwtUtil;
-import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.exception.ResourceNotFoundException;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          UserService userService,
-                          JwtUtil jwtUtil) {
+                          UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User saved = userService.registerUser(user);
-        return ResponseEntity.ok(saved);
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-
+    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), loginRequest.getPassword()
+            )
         );
 
-        // ✅ IMPORTANT: findByEmail returns User, NOT Optional
-        User user = userService.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        // You can integrate JWT token generation here
+        String token = "dummy-token"; 
 
-        AuthResponse response =
-                new AuthResponse(
-                        token,
-                        user.getId(),
-                        user.getEmail(),
-                        user.getRole()
-                );
-
-        return ResponseEntity.ok(response);
+        return new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
     }
 }
