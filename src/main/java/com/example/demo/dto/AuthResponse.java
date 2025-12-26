@@ -7,7 +7,6 @@ public class AuthResponse {
     private String email;
     private String role;
 
-    // Default constructor
     public AuthResponse() {}
 
     // Constructor for single message
@@ -15,7 +14,7 @@ public class AuthResponse {
         this.message = message;
     }
 
-    // Full constructor with all fields
+    // Full constructor
     public AuthResponse(String message, Long userId, String email, String role) {
         this.message = message;
         this.userId = userId;
@@ -23,7 +22,6 @@ public class AuthResponse {
         this.role = role;
     }
 
-    // ===== Getters & Setters =====
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
 

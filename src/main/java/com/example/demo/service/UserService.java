@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 
 public interface UserService {
     User register(User user);
-    User findByEmail(String email);
-    User getUser(Long id);
+
+    // Add authenticate method
+    User authenticate(String email, String password);
 }
