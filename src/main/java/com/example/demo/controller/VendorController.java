@@ -2,10 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Vendor;
 import com.example.demo.service.impl.VendorServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/vendors")
+@RequestMapping("/api/vendors")
 public class VendorController {
 
     private final VendorServiceImpl vendorService;
@@ -15,12 +16,12 @@ public class VendorController {
     }
 
     @PostMapping
-    public Vendor createVendor(@RequestBody Vendor vendor) {
-        return vendorService.createVendor(vendor);
+    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor) {
+        return ResponseEntity.ok(vendorService.createVendor(vendor));
     }
 
     @GetMapping("/{id}")
-    public Vendor getVendor(@PathVariable Long id) {
-        return vendorService.getVendor(id);
+    public ResponseEntity<Vendor> getVendor(@PathVariable Long id) {
+        return ResponseEntity.ok(vendorService.getVendor(id));
     }
 }
