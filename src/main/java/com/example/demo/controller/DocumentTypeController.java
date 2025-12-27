@@ -32,4 +32,3 @@ public class DocumentTypeController {
         return ResponseEntity.ok(documentTypeService.getAll());
     }
 }
-
