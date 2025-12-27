@@ -21,20 +21,14 @@ public class Vendor {
 
     private LocalDateTime createdAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "vendor_document_types",
-            joinColumns = @JoinColumn(name = "vendor_id"),
-            inverseJoinColumns = @JoinColumn(name = "document_type_id")
-    )
-    private Set<DocumentType> supportedDocumentTypes = new HashSet<>();
+    @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL)
+    private Set<VendorDocument> vendorDocuments = new HashSet<>();
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -46,7 +40,7 @@ public class Vendor {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public Set<DocumentType> getSupportedDocumentTypes() {
-        return supportedDocumentTypes;
+    public Set<VendorDocument> getVendorDocuments() {
+        return vendorDocuments;
     }
 }
