@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.util.JwtUtil;
+import com.example.demo.security.JwtUtil;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,18 +29,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest loginRequest) {
-        // Authenticate using Spring Security
+
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword()
-            )
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
         );
 
-        // Fetch user
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Generate JWT token
         String token = jwtUtil.generateToken(user.getEmail());
 
         return new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
