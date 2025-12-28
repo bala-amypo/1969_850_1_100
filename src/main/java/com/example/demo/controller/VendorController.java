@@ -1,32 +1,35 @@
 package com.example.demo.controller;
-
-import com.example.demo.model.Vendor;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.service.VendorService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import com.example.demo.model.Vendor;
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/vendors")
-public class VendorController {
-
-    private final VendorService vendorService;
-
-    public VendorController(VendorService vendorService) {
-        this.vendorService = vendorService;
+public class VendorController
+{	
+    private final VendorService obj;
+    public VendorController (VendorService obj)
+    {
+        this.obj=obj;
     }
-
     @PostMapping
-    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor) {
-        return ResponseEntity.ok(vendorService.createVendor(vendor));
+    public Vendor createVendor(@RequestBody Vendor vendor)
+    {
+        return obj.createVendor(vendor);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Vendor> getVendor(@PathVariable Long id) {
-        return ResponseEntity.ok(vendorService.getVendor(id));
+    public Vendor getVendor(Long id)
+    {
+        return obj.getVendor(id);
     }
     @GetMapping
-    public ResponseEntity<List<Vendor>> getAllVendors() {
-        return ResponseEntity.ok(vendorService.getAllVendors());
+    public List<Vendor> getAllVendors()
+    {
+        return obj.getAllVendors();
     }
+    
 }
