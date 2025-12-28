@@ -19,4 +19,4 @@ public class ComplianceScoreController {
     public ResponseEntity<ComplianceScore> getScore(@PathVariable Long vendorId) {
         return ResponseEntity.ok(complianceScoreService.getScore(vendorId));
     }
-}
+}	
