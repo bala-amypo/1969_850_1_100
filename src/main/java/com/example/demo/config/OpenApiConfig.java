@@ -19,11 +19,9 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server().url("https://9270.408procr.amypo.ai/")
                 ))
-
                 .addSecurityItem(
                         new SecurityRequirement().addList(securitySchemeName)
                 )
-
                 //Define JWT Bearer scheme
                 .components(
                         new Components()
