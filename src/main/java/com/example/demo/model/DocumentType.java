@@ -12,8 +12,10 @@ public class DocumentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
 
     private String name;
+
     private int weight;
     private boolean required;
 
