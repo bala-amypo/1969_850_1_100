@@ -30,3 +30,4 @@ public class VendorController {
         return ResponseEntity.ok(vendorService.getAllVendors());
     }
 }
+
