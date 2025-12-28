@@ -35,9 +35,7 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
                 .orElseThrow(() -> new ResourceNotFoundException("DocumentType not found"));
 
         if (doc.getExpiryDate() != null && doc.getExpiryDate().isBefore(LocalDate.now())) {
-        throw new IllegalArgumentException("Expiry date cannot be in the past");
-
-
+            throw new IllegalArgumentException("Expiry date cannot be in the past");
         }
 
         doc.setVendor(vendor);
@@ -51,4 +49,3 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
                 .orElseThrow(() -> new ResourceNotFoundException("VendorDocument not found"));
     }
 }
-

@@ -1,3 +1,4 @@
+ComplianceScoringEnginie:
 package com.example.demo.util;
 
 import com.example.demo.model.DocumentType;
@@ -11,37 +12,19 @@ public class ComplianceScoringEngine {
      * Calculates compliance score as percentage of uploaded & valid documents vs required types.
      */
     public double calculateScore(List<DocumentType> required, List<?> uploaded) {
+        if (required.isEmpty()) return 100.0; // edge case: no required types
 
-        if (required.isEmpty()) {
-            return 100.0;
-        }
-
-        double totalWeight = required.stream()
-                .mapToDouble(DocumentType::getWeight)
-                .sum();
-
+        double totalWeight = required.stream().mapToDouble(DocumentType::getWeight).sum();
         double obtained = 0.0;
 
         for (DocumentType dt : required) {
-
             for (Object obj : uploaded) {
-
-                if (obj instanceof DocumentType
-                        && dt.getId().equals(((DocumentType) obj).getId())) {
-
+                if (obj instanceof DocumentType && dt.getId().equals(((DocumentType) obj).getId())) {
                     obtained += dt.getWeight();
-                    break; // ✅ stop inner loop
-
                 } else if (obj instanceof VendorDocument) {
-
                     VendorDocument vd = (VendorDocument) obj;
-
-                    if (vd.getDocumentType() != null
-                            && vd.getDocumentType().getId().equals(dt.getId())
-                            && Boolean.TRUE.equals(vd.getIsValid())) {
-
+                    if (vd.getDocumentType() != null && vd.getDocumentType().getId().equals(dt.getId()) && Boolean.TRUE.equals(vd.getIsValid())) {
                         obtained += dt.getWeight();
-                        break; // ✅ stop inner loop
                     }
                 }
             }
@@ -60,3 +43,4 @@ public class ComplianceScoringEngine {
         return "NON_COMPLIANT";
     }
 }
+

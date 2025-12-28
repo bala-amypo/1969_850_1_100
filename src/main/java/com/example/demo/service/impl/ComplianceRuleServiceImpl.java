@@ -33,4 +33,3 @@ public class ComplianceRuleServiceImpl implements ComplianceRuleService {
         return repository.findAll();
     }
 }
-
