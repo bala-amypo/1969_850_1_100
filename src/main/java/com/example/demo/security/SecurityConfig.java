@@ -11,11 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 @Configuration
 public class SecurityConfig {
 
-    // 🔐 JWT Utility
+    //  JWT Utility
     @Bean
     public JwtUtil jwtUtil() {
         return new JwtUtil(
@@ -24,13 +23,13 @@ public class SecurityConfig {
         );
     }
 
-    // 👤 Custom UserDetailsService
+    //  Custom UserDetailsService
     @Bean
     public CustomUserDetailsService userDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
     }
 
-    // 🔍 JWT Authentication Filter
+    // JWT Authentication Filter
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(
             JwtUtil jwtUtil,
@@ -39,13 +38,13 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtUtil, uds);
     }
 
-    // 🔑 Password Encoder
+    // Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 🔐 Authentication Manager
+    // Authentication Manager
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config
@@ -53,7 +52,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // 🛡️ Security Filter Chain
+    // Security Filter Chain
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
@@ -68,29 +67,24 @@ public class SecurityConfig {
             .sessionManagement(sm ->
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
-            // ❌ Disable default Spring Security login mechanisms
             .httpBasic(httpBasic -> httpBasic.disable())
             .formLogin(form -> form.disable())
 
-            // ✅ Authorization rules
+            // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
                     "/auth/**",
                     "/health",
-
-                    // 🔓 Swagger / OpenAPI
+                    // Swagger / OpenAPI
                     "/swagger-ui.html",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"
                 ).permitAll()
 
-                // 🔒 Everything else requires JWT
+                //Everything else requires JWT
                 .anyRequest().authenticated()
             )
-
-            // JWT filter
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
