@@ -1,45 +1,31 @@
 package com.example.demo.util;
 
 import com.example.demo.model.DocumentType;
-import com.example.demo.model.VendorDocument;
-
 import java.util.List;
 
 public class ComplianceScoringEngine {
 
-    /**
-     * Calculates compliance score as percentage of uploaded & valid documents vs required types.
-     */
-    public double calculateScore(List<DocumentType> required, List<?> uploaded) {
-        if (required.isEmpty()) return 100.0; // edge case: no required types
+    public double calculateScore(List<DocumentType> requiredTypes, List<DocumentType> submittedTypes) {
+        if (requiredTypes == null || requiredTypes.isEmpty()) return 100.0;
 
-        double totalWeight = required.stream().mapToDouble(DocumentType::getWeight).sum();
-        double obtained = 0.0;
+        int totalWeight = 0;
+        int achieved = 0;
 
-        for (DocumentType dt : required) {
-            for (Object obj : uploaded) {
-                if (obj instanceof DocumentType && dt.getId().equals(((DocumentType) obj).getId())) {
-                    obtained += dt.getWeight();
-                } else if (obj instanceof VendorDocument) {
-                    VendorDocument vd = (VendorDocument) obj;
-                    if (vd.getDocumentType() != null && vd.getDocumentType().getId().equals(dt.getId()) && Boolean.TRUE.equals(vd.getIsValid())) {
-                        obtained += dt.getWeight();
-                    }
-                }
-            }
+        for (DocumentType dt : requiredTypes) {
+            totalWeight += dt.getWeight();
+            boolean present = submittedTypes != null && submittedTypes.stream()
+                    .anyMatch(x -> x.getId() != null && x.getId().equals(dt.getId()));
+            if (present) achieved += dt.getWeight();
         }
 
-        return (obtained / totalWeight) * 100.0;
+        if (totalWeight == 0) return 100.0;
+        return (achieved * 100.0) / totalWeight;
     }
 
-    /**
-     * Returns rating based on score boundaries.
-     */
     public String deriveRating(double score) {
-        if (score >= 90) return "EXCELLENT";
-        if (score >= 75) return "GOOD";
-        if (score >= 50) return "POOR";
+        if (score >= 90.0) return "EXCELLENT";
+        if (score >= 75.0) return "GOOD";
+        if (score >= 50.0) return "POOR";
         return "NON_COMPLIANT";
     }
 }
-

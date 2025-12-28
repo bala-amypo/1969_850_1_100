@@ -13,7 +13,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // REQUIRED by test case
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -21,35 +20,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User register(User user) {
+        return registerUser(user);
+    }
+
     public User registerUser(User user) {
+        if (user == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("Invalid user");
+        }
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already used");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         return userRepository.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @Override
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
+   
     @Override
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found");
-        }
-        userRepository.deleteById(id);
+    public User getUser(Long id) {
+        return getById(id);
     }
 }
