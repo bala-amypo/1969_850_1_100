@@ -15,3 +15,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Used in tests to check duplicate users
     boolean existsByEmail(String email);
 }
+
