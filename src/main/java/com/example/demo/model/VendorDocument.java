@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,6 +14,7 @@ public class VendorDocument {
 
     private String fileUrl;
     private LocalDate expiryDate;
+
     private Boolean isValid = true;
     private LocalDateTime uploadedAt;
 
@@ -31,7 +31,6 @@ public class VendorDocument {
         this.uploadedAt = LocalDateTime.now();
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
