@@ -15,3 +15,4 @@ public interface VendorDocumentRepository extends JpaRepository<VendorDocument, 
     @Query("SELECT vd FROM VendorDocument vd WHERE vd.expiryDate < :date")
     List<VendorDocument> findExpiredDocuments(LocalDate date);
 }
+
