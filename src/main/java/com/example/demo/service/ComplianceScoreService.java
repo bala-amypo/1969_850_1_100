@@ -6,4 +6,3 @@ public interface ComplianceScoreService {
     ComplianceScore evaluateVendor(Long vendorId);
     ComplianceScore getScore(Long vendorId);
 }
-
