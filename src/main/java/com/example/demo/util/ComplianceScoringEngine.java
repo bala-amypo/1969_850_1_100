@@ -3,56 +3,33 @@ package com.example.demo.util;
 import com.example.demo.model.DocumentType;
 import com.example.demo.model.VendorDocument;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ComplianceScoringEngine {
 
     /**
-     * Calculates compliance score as percentage of valid uploaded documents
-     * vs required document types.
+     * Calculates compliance score as percentage of uploaded & valid documents vs required types.
      */
     public double calculateScore(List<DocumentType> required, List<?> uploaded) {
+        if (required.isEmpty()) return 100.0; // edge case: no required types
 
-        if (required == null || required.isEmpty()) {
-            return 100.0; // No required documents → fully compliant
-        }
-
-        double totalWeight = required.stream()
-                .mapToDouble(DocumentType::getWeight)
-                .sum();
-
+        double totalWeight = required.stream().mapToDouble(DocumentType::getWeight).sum();
         double obtained = 0.0;
 
-        // Track already counted document types (prevents double counting)
-        Set<Long> satisfiedDocs = new HashSet<>();
-
         for (DocumentType dt : required) {
-
             for (Object obj : uploaded) {
-
-                if (obj instanceof VendorDocument vd) {
-
-                    if (vd.getDocumentType() != null
-                            && vd.getDocumentType().getId().equals(dt.getId())
-                            && Boolean.TRUE.equals(vd.getIsValid())
-                            && !satisfiedDocs.contains(dt.getId())) {
-
+                if (obj instanceof DocumentType && dt.getId().equals(((DocumentType) obj).getId())) {
+                    obtained += dt.getWeight();
+                } else if (obj instanceof VendorDocument) {
+                    VendorDocument vd = (VendorDocument) obj;
+                    if (vd.getDocumentType() != null && vd.getDocumentType().getId().equals(dt.getId()) && Boolean.TRUE.equals(vd.getIsValid())) {
                         obtained += dt.getWeight();
-                        satisfiedDocs.add(dt.getId());
-                        break; // move to next required document
                     }
                 }
             }
         }
 
-        if (totalWeight == 0) return 0.0;
-
-        double score = (obtained / totalWeight) * 100.0;
-
-        // Safety clamp
-        return Math.min(score, 100.0);
+        return (obtained / totalWeight) * 100.0;
     }
 
     /**
@@ -65,3 +42,4 @@ public class ComplianceScoringEngine {
         return "NON_COMPLIANT";
     }
 }
+
