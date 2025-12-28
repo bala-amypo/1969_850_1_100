@@ -1,58 +1,74 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
-import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.service.UserService;   // ✅ CHANGE
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final UserService userService;     // ✅ CHANGE
+    private final UserRepository userRepository;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          UserService userService,
-                          JwtUtil jwtUtil) {
+                          JwtUtil jwtUtil,
+                          UserService userService,   // ✅ CHANGE
+                          UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User saved = userService.registerUser(user);
-        return ResponseEntity.ok(saved);
+    public AuthResponse register(@RequestBody RegisterRequest req) {
+
+        User u = new User();
+        u.setFullName(req.getFullName());
+        u.setEmail(req.getEmail());
+        u.setPassword(req.getPassword());
+        u.setRole("USER");
+
+        // ✅ METHOD NAME FIXED
+        User saved = userService.register(u);
+
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
+        );
+
+        String token = jwtUtil.generateToken(
+                auth, saved.getId(), saved.getEmail(), saved.getRole()
+        );
+
+        return new AuthResponse(token, saved.getId(), saved.getEmail(), saved.getRole());
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public AuthResponse login(@RequestBody LoginRequest req) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
         );
-        User user = userService.findByEmail(request.getEmail());
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        User u = userRepository.findByEmail(req.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        AuthResponse response =
-                new AuthResponse(
-                        token,
-                        user.getId(),
-                        user.getEmail(),
-                        user.getRole()
-                );
+        String token = jwtUtil.generateToken(
+                auth, u.getId(), u.getEmail(), u.getRole()
+        );
 
-        return ResponseEntity.ok(response);
+        return new AuthResponse(token, u.getId(), u.getEmail(), u.getRole());
     }
 }
