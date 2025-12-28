@@ -29,11 +29,20 @@ public class DocumentType {
     }
 
     // getters & setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public int getWeight() { return weight; }
     public void setWeight(int weight) { this.weight = weight; }
+    public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    this.name = name;
+}
+
 
     public boolean getRequired() { return required; }
     public void setRequired(boolean required) { this.required = required; }
