@@ -35,21 +35,18 @@ public class ComplianceRule {
     public void setRuleName(String ruleName) {
          this.ruleName = ruleName; 
          }
-
     public String getMatchType() {
          return matchType;
           }
     public void setMatchType(String matchType) {
          this.matchType = matchType;
           }
-
     public Double getThreshold() {
          return threshold;
           }
     public void setThreshold(Double threshold) { 
         this.threshold = threshold;
          }
-
     public LocalDateTime getCreatedAt() { 
         return createdAt; 
         }
