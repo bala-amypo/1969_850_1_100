@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,19 +14,16 @@ public class VendorDocument {
     private Long id;
 
     private String fileUrl;
-
     private LocalDate expiryDate;
-
-    private Boolean isValid;
-
+    private Boolean isValid = true;
     private LocalDateTime uploadedAt;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "vendor_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "document_type_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
     @PrePersist
@@ -33,6 +31,7 @@ public class VendorDocument {
         this.uploadedAt = LocalDateTime.now();
     }
 
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -43,7 +42,7 @@ public class VendorDocument {
     public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
 
     public Boolean getIsValid() { return isValid; }
-    public void setIsValid(Boolean isValid) { this.isValid = isValid; }
+    public void setIsValid(Boolean valid) { isValid = valid; }
 
     public LocalDateTime getUploadedAt() { return uploadedAt; }
 
@@ -53,3 +52,4 @@ public class VendorDocument {
     public DocumentType getDocumentType() { return documentType; }
     public void setDocumentType(DocumentType documentType) { this.documentType = documentType; }
 }
+

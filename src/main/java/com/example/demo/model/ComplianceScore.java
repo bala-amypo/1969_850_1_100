@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,13 +13,12 @@ public class ComplianceScore {
     private Long id;
 
     private double scoreValue;
-
     private String rating;
 
     private LocalDateTime evaluatedAt;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "vendor_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "vendor_id")
     private Vendor vendor;
 
     @PrePersist
@@ -26,6 +26,7 @@ public class ComplianceScore {
         this.evaluatedAt = LocalDateTime.now();
     }
 
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

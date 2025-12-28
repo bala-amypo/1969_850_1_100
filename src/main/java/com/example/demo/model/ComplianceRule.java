@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,12 +12,8 @@ public class ComplianceRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String ruleName;
-
-    @Column(nullable = false)
     private String matchType;
-
     private double threshold = 0.0;
 
     private LocalDateTime createdAt;
@@ -26,6 +23,7 @@ public class ComplianceRule {
         this.createdAt = LocalDateTime.now();
     }
 
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
