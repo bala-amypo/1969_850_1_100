@@ -8,28 +8,21 @@ import java.util.Set;
 @Entity
 @Table(name = "document_types")
 public class DocumentType {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-
     private String name;
-
     private int weight;
     private boolean required;
-
     private LocalDateTime createdAt;
-
     @ManyToMany(mappedBy = "supportedDocumentTypes")
     private Set<Vendor> vendors = new HashSet<>();
-
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
+    public Long getId() {
+         return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
