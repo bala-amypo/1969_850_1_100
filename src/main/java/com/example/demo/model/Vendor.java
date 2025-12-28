@@ -31,18 +31,30 @@ public class Vendor {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getVendorName() { return vendorName; }
-    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
-
-    public String getIndustry() { return industry; }
-    public void setIndustry(String industry) { this.industry = industry; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public Set<DocumentType> getSupportedDocumentTypes() { return supportedDocumentTypes; }
+    public Long getId() { 
+    return id;
+     }
+    public void setId(Long id) { 
+    this.id = id;
+     }
+    public String getVendorName() {
+     return vendorName;
+      }
+    public void setVendorName(String vendorName) {
+     this.vendorName = vendorName;
+      }
+    public String getIndustry() { 
+    return industry;
+     }
+    public void setIndustry(String industry) { 
+    this.industry = industry; 
+    }
+    public LocalDateTime getCreatedAt() {
+     return createdAt; 
+     }
+    public Set<DocumentType> getSupportedDocumentTypes() { 
+    return supportedDocumentTypes;
+     }
     public void setSupportedDocumentTypes(Set<DocumentType> supportedDocumentTypes) {
         this.supportedDocumentTypes = supportedDocumentTypes;
     }

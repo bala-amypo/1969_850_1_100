@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
 @Entity
 @Table(name = "document_types")
 public class DocumentType {
@@ -22,20 +21,38 @@ public class DocumentType {
         this.createdAt = LocalDateTime.now();
     }
     public Long getId() {
-         return id; }
-    public void setId(Long id) { this.id = id; }
+         return id;
+          }
+    public void setId(Long id) {
+     this.id = id;
+      }
+    public String getName() { 
+    return name;
+     }
+    public void setName(String name) { 
+    this.name = name; 
+    }
+    public int getWeight() { 
+        return weight; 
+        }
+    public void setWeight(int weight) {
+         this.weight = weight;
+          }
+    public boolean getRequired() { 
+        return required;
+         }
+    public void setRequired(boolean required) {
+         this.required = required;
+          }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public LocalDateTime getCreatedAt() { 
+        return createdAt; 
+        }
 
-    public int getWeight() { return weight; }
-    public void setWeight(int weight) { this.weight = weight; }
-
-    public boolean getRequired() { return required; }
-    public void setRequired(boolean required) { this.required = required; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public Set<Vendor> getVendors() { return vendors; }
-    public void setVendors(Set<Vendor> vendors) { this.vendors = vendors; }
+    public Set<Vendor> getVendors() { 
+        return vendors;
+         }
+    public void setVendors(Set<Vendor> vendors) {
+         this.vendors = vendors;
+          }
 }
