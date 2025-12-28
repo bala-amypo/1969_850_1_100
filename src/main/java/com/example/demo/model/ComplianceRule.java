@@ -47,7 +47,10 @@ public class ComplianceRule {
          return threshold;
           }
     public void setThreshold(Double threshold) { 
-        this.threshold = threshold; }
+        this.threshold = threshold;
+         }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getCreatedAt() { 
+        return createdAt; 
+        }
 }
