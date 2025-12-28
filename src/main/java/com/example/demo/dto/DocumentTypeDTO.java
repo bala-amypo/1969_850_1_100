@@ -1,6 +1,5 @@
-
 package com.example.demo.dto;
-
+	
 public class DocumentTypeDTO {
 
     private Long id;
@@ -50,4 +49,3 @@ public class DocumentTypeDTO {
         this.weight = weight;
     }
 }
-

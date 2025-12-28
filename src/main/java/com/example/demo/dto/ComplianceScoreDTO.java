@@ -42,4 +42,3 @@ public class ComplianceScoreDTO {
         this.rating = rating;
     }
 }
-
