@@ -1,31 +1,18 @@
 package com.example.demo.config;
-
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+import java.util.List;
 @Configuration
-public class SecurityConfig {
-
-    private final UserRepository userRepository;
-
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+public class SwaggerConfig {
     @Bean
-    public UserDetailsService userDetailsService() {
-        return email -> userRepository.findByEmail(email)
-                .map(user -> org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .roles(user.getRole())
-                        .build()
-                )
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                // You need to change the port as per your server
+                .servers(List.of(
+                        new Server().url("https://9270.408procr.amypo.ai/")
+                ));
+        }
 }
+
