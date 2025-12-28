@@ -1,3 +1,4 @@
+
 package com.example.demo.dto;
 
 public class DocumentTypeDTO {
@@ -49,3 +50,4 @@ public class DocumentTypeDTO {
         this.weight = weight;
     }
 }
+
