@@ -1,11 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.model.DocumentType;
-
+import com.example.demo.model.VendorDocument;
 import java.util.List;
 
-public interface DocumentTypeService {
-    DocumentType create(DocumentType dt);
-    DocumentType getById(Long id);
-    List<DocumentType> getAll();
+public interface VendorDocumentService {
+    VendorDocument uploadDocument(Long vendorId, Long documentTypeId, VendorDocument doc);
+    VendorDocument getDocument(Long id);
+    List<VendorDocument> getDocumentsForVendor(Long vendorId);
 }
