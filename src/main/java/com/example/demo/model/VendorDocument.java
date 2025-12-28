@@ -52,4 +52,3 @@ public class VendorDocument {
     public DocumentType getDocumentType() { return documentType; }
     public void setDocumentType(DocumentType documentType) { this.documentType = documentType; }
 }
-
