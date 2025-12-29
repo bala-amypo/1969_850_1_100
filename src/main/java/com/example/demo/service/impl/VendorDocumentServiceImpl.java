@@ -1,9 +1,9 @@
-package com.example.demo.service.impl;
+//*package com.example.demo.service.impl;
 	
-import com.example.demo.model.DocumentType;
-import com.example.demo.model.Vendor;
-import com.example.demo.model.VendorDocument;
-import com.example.demo.repository.DocumentTypeRepository;
+//import com.example.demo.model.DocumentType;
+//import com.example.demo.model.Vendor;
+//import com.example.demo.model.VendorDocument;
+/import com.example.demo.repository.DocumentTypeRepository;
 import com.example.demo.repository.VendorDocumentRepository;
 import com.example.demo.repository.VendorRepository;
 import com.example.demo.service.VendorDocumentService;
@@ -53,7 +53,5 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
     public List<VendorDocument> getDocumentsForVendor(Long vendorId) {
         Vendor vendor = vendorRepository.findById(vendorId).orElseThrow();
         return vendorDocumentRepository.findByVendor(vendor);
-    }
-}
-
-
+ //   }
+//}
