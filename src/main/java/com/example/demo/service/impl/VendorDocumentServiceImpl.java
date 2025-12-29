@@ -33,7 +33,6 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
         this.documentTypeRepository = documentTypeRepository;
     }
 
-    // ✅ FIXED: Expired document handling
     @Override
     public VendorDocument uploadDocument(Long vendorId, Long typeId, VendorDocument document) {
 
@@ -45,13 +44,11 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Document type not found with id: " + typeId));
 
+        // ✅ Test-compliant expiry validation
         if (document.getExpiryDate() != null &&
                 document.getExpiryDate().isBefore(LocalDate.now())) {
 
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Document expired"
-            );
+            throw new IllegalArgumentException("Expiry date cannot be in the past");
         }
 
         document.setVendor(vendor);
@@ -59,12 +56,11 @@ public class VendorDocumentServiceImpl implements VendorDocumentService {
         return vendorDocumentRepository.save(document);
     }
 
-    // ✅ FIXED: Not-found case
     @Override
     public VendorDocument getDocument(Long id) {
         return vendorDocumentRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Document not found with id: " + id));
+                        new ResourceNotFoundException("VendorDocument not found"));
     }
 
     @Override
