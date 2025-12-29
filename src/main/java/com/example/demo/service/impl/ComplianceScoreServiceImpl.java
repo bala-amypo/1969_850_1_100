@@ -64,8 +64,7 @@ public class ComplianceScoreServiceImpl implements ComplianceScoreService {
     @Override
     public ComplianceScore getScore(Long vendorId) {
         return complianceScoreRepository.findByVendor_Id(vendorId)
-.orElseThrow(() ->
-        new ResourceNotFoundException("Score not found"));
+                .orElse(null);
     }
 
     private ComplianceScore saveScore(Vendor vendor, double scoreValue) {
