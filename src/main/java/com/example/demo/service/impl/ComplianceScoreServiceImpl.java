@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.ComplianceScore;
 import com.example.demo.model.DocumentType;
 import com.example.demo.model.Vendor;
@@ -9,11 +10,10 @@ import com.example.demo.repository.DocumentTypeRepository;
 import com.example.demo.repository.VendorDocumentRepository;
 import com.example.demo.repository.VendorRepository;
 import com.example.demo.service.ComplianceScoreService;
+import com.example.demo.util.ComplianceScoringEngine;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ComplianceScoreServiceImpl implements ComplianceScoreService {
@@ -37,40 +37,59 @@ public class ComplianceScoreServiceImpl implements ComplianceScoreService {
 
     @Override
     public ComplianceScore evaluateVendor(Long vendorId) {
-        Vendor vendor = vendorRepository.findById(vendorId).orElseThrow();
 
-        Set<DocumentType> requiredTypes = vendor.getSupportedDocumentTypes();
+        Vendor vendor = vendorRepository.findById(vendorId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Vendor not found"));
+
+        List<DocumentType> requiredTypes =
+                documentTypeRepository.findByRequiredTrue();
+
+        // No required docs → 100%
         if (requiredTypes.isEmpty()) {
-            return saveScore(vendor, 100.0);
+            ComplianceScore score = new ComplianceScore();
+            score.setVendor(vendor);
+            score.setScoreValue(100.0);
+            score.setRating("EXCELLENT");
+            return complianceScoreRepository.save(score);
         }
 
         List<VendorDocument> documents =
                 vendorDocumentRepository.findByVendor(vendor);
 
-        long validCount = requiredTypes.stream()
-                .filter(dt ->
-                        documents.stream().anyMatch(d ->
-                                d.getDocumentType().equals(dt) &&
-                                (d.getExpiryDate() == null ||
-                                 d.getExpiryDate().isAfter(LocalDate.now()))
-                        )
-                )
-                .count();
+        int totalWeight = requiredTypes.stream()
+                .mapToInt(DocumentType::getWeight)
+                .sum();
 
-        double score = (validCount * 100.0) / requiredTypes.size();
-        return saveScore(vendor, score);
+        int obtainedWeight = 0;
+
+        for (DocumentType dt : requiredTypes) {
+            boolean hasValid = documents.stream().anyMatch(d ->
+                    d.getDocumentType().getId().equals(dt.getId()) &&
+                    d.isValid()
+            );
+
+            if (hasValid) {
+                obtainedWeight += dt.getWeight();
+            }
+        }
+
+        double scoreValue = (obtainedWeight * 100.0) / totalWeight;
+
+        ComplianceScore score = new ComplianceScore();
+        score.setVendor(vendor);
+        score.setScoreValue(scoreValue);
+        score.setRating(
+                new ComplianceScoringEngine().deriveRating(scoreValue)
+        );
+
+        return complianceScoreRepository.save(score);
     }
 
     @Override
     public ComplianceScore getScore(Long vendorId) {
         return complianceScoreRepository.findByVendor_Id(vendorId)
-                .orElse(null);
-    }
-
-    private ComplianceScore saveScore(Vendor vendor, double scoreValue) {
-        ComplianceScore score = new ComplianceScore();
-        score.setVendor(vendor);
-        score.setScoreValue(scoreValue);
-        return complianceScoreRepository.save(score);
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Score not found"));
     }
 }
