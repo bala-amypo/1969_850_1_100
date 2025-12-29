@@ -8,3 +8,4 @@ public interface VendorDocumentService {
     VendorDocument getDocument(Long id);
     List<VendorDocument> getDocumentsForVendor(Long vendorId);
 }
+
